@@ -1,9 +1,12 @@
 #include "GlobalFunctions.h"
 #include "AVLTree.h"
+//#include "RedBlackTree.h"
 using namespace std;
 
 int main() 
 {
+    AVLTree avlTree;
+  //  RedBlackTree redBlackTree;
     cout << "\nWelcome to Team Exception Thrown's GitLite!" << endl;
 
     filesystem::path filePath;
@@ -88,6 +91,7 @@ int main()
         cin >> m;
     }
 
+
     int lineNumber = 1; 
     //process records
     while (file.getline(line, sizeof(line)))
@@ -97,16 +101,14 @@ int main()
         int currentFieldIndex = 0;
         char fieldValue[100] = "";
 
-        // Extract the chosen field's value
-        while (token && currentFieldIndex <= numFields) 
+        //extract the chosen field's value
+        while (token && currentFieldIndex <= columnNum)
         {
-            if (currentFieldIndex == numFields)
+            if (currentFieldIndex == columnNum)
                 copyIn(fieldValue, token);
             currentFieldIndex++;
             token = tokenize(nullptr, ",");
         }
-
-        cout << "Field val: " << fieldValue << endl;
 
         if (fieldValue[0] == '\0') 
         {
@@ -115,20 +117,10 @@ int main()
         }
 
         int hashKey = instructorHash(fieldValue);
-
-        //create a file for the key
-        char filename[20];
-        snprintf(filename, sizeof(filename), "%s.txt", fieldValue); //create file name as key.txt
-        ofstream keyFile(filename);
-        if (keyFile.is_open()) 
-        {
-            cout << "file made";
-            keyFile << "Line Number: " << lineNumber << "\n";
-            keyFile.close();
-        }
-    }
-
-
+        cout << "INSERTING: " << hashKey << endl;
+        avlTree.insert(hashKey, fieldValue);
+      // redBlackTree.insert(hashKey, fieldValue);
+    }    
 
     file.close();
     return 0;
